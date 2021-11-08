@@ -24,6 +24,14 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 ##--------------------------------------------------------------
 
+if {[info exists ::env(SI_OR_PI)]} {
+  set S_SI_OR_PI $SI_OR_PI
+  puts "param is $S_SI_OR_PI got from $SI_OR_PI"
+} elseif {![info exists SI_OR_PI]} {
+  set S_SI_OR_PI 0
+  puts "param not found; set to 0"
+}
+
 adi_project ad7616_sdz_zc706 0 [list \
   SI_OR_PI  [get_env_param SI_OR_PI  0] \
 ]
@@ -34,12 +42,14 @@ adi_project_files ad7616_sdz_zc706 [list \
 
 switch [get_env_param SI_OR_PI 2] {
   0 {
+    puts "switch got $S_SI_OR_PI"
     adi_project_files ad7616_sdz_zc706 [list \
       "system_top_si.v" \
       "serial_if_constr.xdc"
     ]
   }
   1 {
+    puts "switch got $S_SI_OR_PI"
     adi_project_files ad7616_sdz_zc706 [list \
       "system_top_pi.v" \
       "parallel_if_constr.xdc"
